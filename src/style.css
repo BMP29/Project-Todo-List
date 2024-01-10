@@ -64,3 +64,8 @@ header {
     transition: 0.5s;
     background-color: darkblue;
 }
+
+#btnMenu {
+    background: none;
+    border: none;
+}
