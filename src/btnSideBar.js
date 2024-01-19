@@ -3,7 +3,7 @@ const sideBar = document.getElementById('sidebar');
 
 btnSB.addEventListener('click', () => {
     let marginLeft = window.getComputedStyle(sideBar).getPropertyValue('margin-left');
-    const hidden = '-250px';
+    const hidden = '-280px';
     const unhide = '0';
 
     if(marginLeft == hidden) {

@@ -82,8 +82,8 @@ header {
     position: relative;
     top: 0;
     left: 0;
-    width: 250px;
-    margin-left: -250px;
+    width: 280px;
+    margin-left: -280px;
     background-color: #0000003d;
     height: 100%;
     transition: 0.3s;
