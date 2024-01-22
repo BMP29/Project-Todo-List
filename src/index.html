@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TODO-List</title>
-</head>
 <body>
     <header>
         <button id="btnSideBar">
@@ -23,35 +22,61 @@
 
     <main id="content">
         <div id="sidebar">
-            <section id="filtes">
-                <h2>Filters</h2>
-                <ul>
-                    <li>
+            <section id="filters-section">
+                <h2 class="section-title">Filters</h2>
+                <ul id="filters-list" class="sidebar-list">
+                    <li class="btnFilter sidebar-item">
                         <img src="./images/inbox.png" alt="inbox Icon">
                         <h3>Inbox</h3>
                     </li>
-                    <li>
+                    <li class="btnFilter sidebar-item">
                         <img src="./images/icons8-date-to-48.png" alt="today Icon">
                         <h3>Today</h3>
                     </li>
-                    <li>
+                    <li class="btnFilter sidebar-item">
                         <img src="./images/icons8-calendar-7-48.png" alt="week Icon">
                         <h3>Week</h3>
                     </li>
-                    <li>
+                    <li class="btnFilter sidebar-item">
                         <img src="./images/icons8-calendar-48.png" alt="month Icon">
                         <h3>Month</h3>
+                    </li>
+                    <li class="btnFilter sidebar-item">
+                        <img src="./images/icons8-star-48.png" alt="month Icon">
+                        <h3>Important</h3>
                     </li>
                 </ul>
             </section>
 
-            <section id="projects">
-                <h2>My Projects</h2>
-                <ul>
-                    <li>
-                        <img src="" alt="">
+            <section id="projects-section">
+                <h2 class="section-title">My Projects</h2>
+                <ul id="user-projects" class="sidebar-list">
+                    <li class="project-item sidebar-item">
+                        <button>
+                            <i class="project-drag"></i>
+                        </button>
                         <h3>My Project</h3>
-                        <img src="" alt="">
+                        <button>
+                            <i class="project-settings"></i>
+                        </button>
+                    </li>
+                    <li class="project-item sidebar-item">
+                        <button>
+                            <i class="project-drag"></i>
+                        </button>
+                        <h3>My Project</h3>
+                        <button>
+                            <i class="project-settings"></i>
+                        </button>
+                    </li>
+                    <li class="project-item sidebar-item">
+                        <button>
+                            <i class="project-drag"></i>
+                        </button>
+                        <h3>My Project</h3>
+                        <button>
+                            <i class="project-settings"></i>
+                        </button>
                     </li>
                 </ul>
             </section>
