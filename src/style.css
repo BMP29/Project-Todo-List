@@ -107,7 +107,7 @@ header {
     background-color: #ffffff;
     color: var(--mainLightThemeTextColor);
     transition: 0.3s;
-    margin: 16px 0;
+    margin: auto 0;
     margin-left: 14px;
     border: 3px solid var(--mainLightThemeDarkBlue);
     border-radius: 20px;
@@ -171,10 +171,6 @@ header {
     padding: 0;
 }
 
-.project-item:last-child {
-    margin-bottom: 15px;
-}
-
 .project-drag, .project-settings {
     display: inline-block;
     height: 27px;
@@ -197,4 +193,41 @@ header {
 
 .project-item:hover .project-settings  {
     background-image: url('./images/icons8-dots-48\ \(1\).png');
+}
+
+#btnAddProject {
+    display: block;
+    font-weight: 600;
+    background: none;
+    border: none;
+    width: 145px;
+    margin-bottom: 15px;
+    padding: 2px;
+    padding-bottom: 10px;
+    font-family: 'Poppins';
+    border-radius: 7px;
+    margin: 12px auto;
+    box-shadow: 0px 0px 11px 4px rgb(0 0 0 / 8%);
+    cursor: pointer;
+}
+
+#btnAddProject::before {
+    display: inline-block;
+    position: relative;
+    content: '';
+    background-image: url('/src/images/icons8-add-96.png');
+    background-size: cover;
+    height: 25px;
+    width: 25px;
+    top: 7px;
+    left: 0;
+}
+
+#btnAddProject:hover {
+    background-color: var(--mainLightThemeDarkBlue);
+    color: white;
+}
+
+#btnAddProject:hover::before {
+    background-image: url('./images/icons8-add-96\ \(1\).png');
 }
