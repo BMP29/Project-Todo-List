@@ -111,6 +111,7 @@ header {
     margin-left: 14px;
     border: 3px solid var(--mainLightThemeDarkBlue);
     border-radius: 20px;
+    min-height: 95%;
 }
 
 .section-title {
@@ -139,6 +140,7 @@ header {
     border-radius: 7px;
     box-shadow: 0px 0px 11px 4px rgb(0 0 0 / 8%);
     cursor: pointer;
+    background-color: white;
 }
 
 .sidebar-item > * {
