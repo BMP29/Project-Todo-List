@@ -233,3 +233,61 @@ header {
 #btnAddProject:hover::before {
     background-image: url('./images/icons8-add-96\ \(1\).png');
 }
+
+#project-form {    
+    padding: 20px;
+    border: 2px solid black;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+}
+
+#project-name-box > * {
+    display: block;
+}
+
+#project-name-box {
+    align-self: flex-start;
+}
+
+#project-name-box label {
+    font-size: 22px;
+    color: black;
+}
+
+#project-name-box input {
+    outline: none;
+    border: 1px solid #a1a1a1;
+    border-radius: 5px;
+    padding: 2px 5px;
+    font-size: 18px;
+    width: 100%;
+}
+
+#project-name-box input:focus {
+    border: 1px solid #000;
+}
+
+#confirm-project {
+    margin-top: 8px;
+    align-self: flex-end;
+    padding: 5px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #00b7ff;
+    color: white;
+    font-weight: bold;
+}
+
+#blur-background {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #00000069;
+}
