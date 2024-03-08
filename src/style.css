@@ -104,8 +104,6 @@ header {
 }
 
 #sidebar {
-    top: 0;
-    left: 0;
     width: 310px;
     background-color: #ffffff;
     color: var(--mainLightThemeTextColor);
