@@ -1,5 +1,32 @@
 const renderProjects = (projects) => {
+    if(projects.length == 0) return;
 
+    const userProjects = document.getElementById('user-projects');
+
+    projects.forEach((project, index) => {
+
+        const projectItem = document.createElement('li'); 
+        const btn1 = document.createElement('button');
+        const btn2 = document.createElement('button');
+        const projectDrag = document.createElement('i');
+        const projectSettings = document.createElement('i');
+        const projectName = document.createElement('h3');
+
+        projectItem.classList.add('project-item');
+        projectItem.classList.add('sidebar-item');
+        projectDrag.classList.add('project-drag');
+        projectSettings.classList.add('project-settings');
+        
+        projectItem.appendChild(btn1);
+        projectItem.appendChild(projectName);
+        projectItem.appendChild(btn2);
+        btn1.appendChild(projectDrag);
+        btn2.appendChild(projectSettings);
+
+        projectItem.setAttribute('data-index', index+1);
+        projectName.textContent = project.title;
+        userProjects.appendChild(projectItem);
+    });
 }
 
 const loadProjForm = () => {
@@ -32,3 +59,5 @@ const loadProjForm = () => {
     
     document.body.appendChild(background);
 }
+
+export { loadProjForm, renderProjects };
