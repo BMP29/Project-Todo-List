@@ -1,8 +1,8 @@
 import '../src/style.css'
 import './btnTheme'
 import './btnSideBar'
-import './functions/loadProjForm'
-import loadProjForm from './functions/loadProjForm';
+import './modules/loadProjForm'
+import loadProjForm from './modules/loadProjForm';
 
 const btnAddProj = document.getElementById('btnAddProject');
 
