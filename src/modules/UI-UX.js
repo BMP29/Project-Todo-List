@@ -1,10 +1,14 @@
-const renderProjects = (projects) => {
+import { addProject, getAllProjects } from './ProjectsController';
+
+const renderProjects = (projects = []) => {
     //exits the function if there's no projects to render
     if(projects.length == 0) return;
 
     //get the project list
     const userProjects = document.getElementById('user-projects');
-
+    
+    //clean the project list
+    userProjects.textContent = '';
     
     projects.forEach((project, index) => {
         //creates the necessary elements
@@ -37,7 +41,7 @@ const renderProjects = (projects) => {
     });
 }
 
-const loadProjForm = () => {
+const loadProjForm = (controller) => {
     //creates the necessary elements
     const background = document.createElement('div');
     const projectForm = document.createElement('div');
@@ -67,7 +71,15 @@ const loadProjForm = () => {
     projectNameBox.appendChild(labelName);
     projectNameBox.appendChild(inputName);
     projectForm.appendChild(btnConfirm);
-    
+
+    //when clicked, will create the project with the name typed in the inputName
+    //then it'll close the modal
+    btnConfirm.addEventListener('click', () => {
+        addProject(inputName.value);
+        renderProjects(getAllProjects());
+        document.body.removeChild(background);
+    });
+
     //inserts the project in the DOM
     document.body.appendChild(background);
 }
