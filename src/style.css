@@ -97,6 +97,7 @@ header {
 }
 
 #content {
+    flex: 1;
     display: flex;
     margin-top: 104px;
     overflow: overlay;
@@ -113,6 +114,7 @@ header {
     border: 3px solid var(--mainLightThemeDarkBlue);
     border-radius: 20px;
     max-height: 95%;
+    min-height: 95%;
     overflow: overlay;
     position: sticky;
 }
