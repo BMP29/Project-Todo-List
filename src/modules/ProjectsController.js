@@ -1,29 +1,42 @@
 import Project from "./Project";
 
-export default class ProjectsController {
-    #Projects = [];
+export { addProject, removeProject, getProject,loadProjects }
 
-    addProject(title) {
-        const newProject = new Project(title);
-        this.#Projects.push(newProject);
+const Projects = [];
 
-        this.storeProject(newProject);
-    }
+function addProject(title) {
+    const newProject = new Project(title);
+    Projects.push(newProject);
+
+    saveState();
+}
+
+function removeProject(index) {
+    index--;
+    const toBeRemoved = Projects[index];
+
+    const temp = Projects.filter((project) => project !== toBeRemoved);
+    Projects = temp;
+    saveState();
+}
+
+function getProject(index) {
+    return Projects[index];
+}
+
+function saveState() {
+    const state = JSON.stringify(this);
+    localStorage.setItem('ProjectList', state);
+}
+
+function loadProjects() {
+    const size = localStorage.length + 1;
+
+    const state = JSON.parse(localStorage.getItem('ProjectList'));
+
+    if(state == null) return;
     
-    removeProject(index) {
-        this.#Projects[index] = undefined;
-    }
-    
-    getProject(index) {
-        return this.#Projects[index];
-    }
-
-    getAllProjects() {
-        return this.#Projects;
-    }
-
-    storeProject(project) {
-        const strProject = JSON.stringify(project);
-        localStorage.setItem(strProject, strProject);
-    }
+    state.Projects.forEach(project => {
+        addProject(project.title);
+    });
 }
