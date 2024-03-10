@@ -1,4 +1,4 @@
-class Task {
+export default class Task {
     title;
     description;
     date;
