@@ -1,4 +1,4 @@
-import { addProject, getAllProjects } from './ProjectsController';
+import { addProject, getAllProjects, getProject } from './ProjectsController';
 
 const renderProjects = (projects = []) => {
     //exits the function if there's no projects to render
@@ -24,7 +24,7 @@ const renderProjects = (projects = []) => {
         projectItem.classList.add('sidebar-item');
         projectDrag.classList.add('project-drag');
         projectSettings.classList.add('project-settings');
-        projectItem.setAttribute('data-index', index+1);
+        projectItem.setAttribute('data-index', index);
         
         //append them 
         projectItem.appendChild(btn1);
@@ -33,11 +33,53 @@ const renderProjects = (projects = []) => {
         btn1.appendChild(projectDrag);
         btn2.appendChild(projectSettings);
 
-        //add the project's name
+        //adding the project's name
         projectName.textContent = project.title;
+
+        //displays the tasks of the project when clicked
+        projectItem.addEventListener('click', () => {
+            displayProjectsTasks(projectItem.getAttribute('data-index'));
+        });
 
         //inserts the project in the DOM
         userProjects.appendChild(projectItem);
+    });
+}
+
+const displayProjectsTasks = (index) => {
+    const project = getProject(index);
+
+    const projectList = document.getElementById('project-tasks');
+    projectList.textContent = '';
+
+    const projectTitle = document.getElementById('project-title');
+    projectTitle.textContent = project.title;
+
+    project.todos.forEach((todo, index) => {
+        const task = document.createElement('div');
+        const taskTitle = document.createElement('h3');
+        const lowerContainer = document.createElement('div');
+        const description = document.createElement('p');
+        const date = document.createElement('span');
+    
+        task.classList.add('task');
+        task.setAttribute('data-index', index);
+        task.setAttribute('data-project', project.title);
+        taskTitle.classList.add('task-title');
+        lowerContainer.classList.add('task-lowerPart');
+        description.classList.add('task-description');
+        date.classList.add('task-date');
+
+        taskTitle.textContent = todo.title;
+        description.textContent = todo.description;
+        date.textContent = todo.date;
+
+        task.appendChild(taskTitle);
+        task.appendChild(lowerContainer);
+        lowerContainer.append(description);
+        lowerContainer.append(date);
+
+        projectList.appendChild(task);
     });
 }
 
