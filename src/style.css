@@ -122,13 +122,6 @@ header {
     position: sticky;
 }
 
-#project-tasks {
-    border: 1px solid #E91E63;
-    margin-right: 7px;
-    flex: 1;
-    border-radius: 20px;
-}
-
 .section-title {
     margin-left: 24px;
     margin-bottom: 8px;
@@ -212,23 +205,29 @@ header {
     background-image: url('./images/icons8-dots-48\ \(1\).png');
 }
 
-#btnAddProject {
-    display: block;
+#btnAddProject, #btnAddTask {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-weight: 600;
     background: none;
     border: none;
     width: 145px;
-    margin-bottom: 15px;
-    padding: 2px;
-    padding-bottom: 10px;
+    padding: 7px;
     font-family: 'Poppins';
     border-radius: 7px;
     margin: 12px auto;
-    box-shadow: 0px 0px 11px 4px rgb(0 0 0 / 8%);
+    box-shadow: 0px 0px 11px 4px rgb(0 0 0 / 15%);
     cursor: pointer;
+    gap: 5px;
 }
 
-#btnAddProject::before {
+#btnAddTask {
+    margin: 0;
+    align-self: center;
+}
+
+#btnAddProject::before, #btnAddTask::before {
     display: inline-block;
     position: relative;
     content: '';
@@ -236,16 +235,14 @@ header {
     background-size: cover;
     height: 25px;
     width: 25px;
-    top: 7px;
-    left: 0;
 }
 
-#btnAddProject:hover {
+#btnAddProject:hover, #btnAddTask:hover {
     background-color: var(--mainLightThemeDarkBlue);
     color: white;
 }
 
-#btnAddProject:hover::before {
+#btnAddProject:hover::before, #btnAddTask:hover::before {
     background-image: url('./images/icons8-add-96\ \(1\).png');
 }
 
@@ -305,4 +302,67 @@ header {
     justify-content: center;
     align-items: center;
     background-color: #00000069;
+}
+
+#project-area {
+    border: 3px solid var(--mainLightThemeDarkBlue);
+    margin-right: 7px;
+    flex: 1;
+    border-radius: 20px;
+    padding: 10px 20px;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+}
+
+.task {
+    color: black;
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 5px;
+    margin-right: 5px;
+    border-radius: 16px;
+    box-shadow: 0px 0px 11px 4px rgb(0 0 0 / 11%);
+    cursor: pointer;
+    background-color: white;
+    max-height: 150px;
+    overflow: hidden;
+}
+
+#project-tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+#project-title {
+    border: 2px solid var(--mainLightThemeDarkBlue);
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 100px;
+    margin-bottom: 20px;
+    align-self: flex-start;
+}
+
+.task-title {
+    font-size: 18px;
+}
+
+.task-description {
+    margin: 0;
+    color: gray;
+    font-size: 13px;
+}
+
+.task-date {
+    font-size: 10px;
+}
+
+.task-lowerPart {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
 }
