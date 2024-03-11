@@ -83,7 +83,7 @@ const displayProjectsTasks = (index) => {
     });
 }
 
-const loadProjForm = (controller) => {
+const loadProjForm = () => {
     //creates the necessary elements
     const background = document.createElement('div');
     const projectForm = document.createElement('div');
