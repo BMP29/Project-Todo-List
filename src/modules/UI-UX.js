@@ -105,34 +105,45 @@ const loadProjForm = () => {
     const labelName = document.createElement('label');
     const inputName = document.createElement('input');
     const btnConfirm = document.createElement('button');
+    const btnCancel = document.createElement('button');
+    const buttonBox = document.createElement('div'); 
     
     //add the attributes to them
-    background.setAttribute('id', 'blur-background');
+    background.setAttribute('id', 'background-form');
     projectForm.setAttribute('id', 'project-form');
     projectNameBox.setAttribute('id', 'project-name-box');
     labelName.setAttribute('for', 'name');
     inputName.setAttribute('type', 'text');
     inputName.setAttribute('id', 'name');
-    inputName.setAttribute('placeholder', 'Ex: My Essay');
     btnConfirm.setAttribute('id', 'confirm-project');
+    btnConfirm.classList.add('btnConfirm');
     btnConfirm.setAttribute('type', 'button');
+    btnCancel.setAttribute('id', 'btnCancel');
+    buttonBox.setAttribute('id', 'button-box');
 
     //add text to the necessary elements
     labelName.textContent = 'Name';
     btnConfirm.textContent = 'Ok';
+    btnCancel.textContent = 'Cancel';
     
     //append them 
     background.appendChild(projectForm);
     projectForm.appendChild(projectNameBox);
     projectNameBox.appendChild(labelName);
     projectNameBox.appendChild(inputName);
-    projectForm.appendChild(btnConfirm);
+    buttonBox.appendChild(btnCancel);
+    buttonBox.appendChild(btnConfirm);
+    projectForm.appendChild(buttonBox);
 
     //when clicked, will create the project with the name typed in the inputName
     //then it'll close the modal
     btnConfirm.addEventListener('click', () => {
         addProject(inputName.value);
         renderProjects(getAllProjects());
+        document.body.removeChild(background);
+    });
+
+    btnCancel.addEventListener('click', () => {
         document.body.removeChild(background);
     });
 
@@ -148,6 +159,7 @@ const loadTaskForm = () => {
     // Create 'Ok' button
     const btnOk = document.createElement('button');
     btnOk.id = 'btnOk';
+    btnOk.classList.add('btnConfirm');
     btnOk.textContent = 'Ok';
 
     // Create 'Cancel' button
@@ -158,7 +170,7 @@ const loadTaskForm = () => {
 
     // Create background div for the task form
     const bgTaskFormDiv = document.createElement('div');
-    bgTaskFormDiv.id = 'background-taskForm';
+    bgTaskFormDiv.id = 'background-form';
 
     // Create the main task form div
     const taskFormDiv = document.createElement('form');
@@ -275,8 +287,8 @@ const loadTaskForm = () => {
     taskFormDiv.appendChild(titleBoxDiv);
     taskFormDiv.appendChild(descriptionBoxDiv);
     taskFormDiv.appendChild(detailsBoxDiv);
-    buttonBox.appendChild(btnOk);
     buttonBox.appendChild(btnCancel);
+    buttonBox.appendChild(btnOk);
     taskFormDiv.appendChild(buttonBox);
 
     // Append task form to the background task form div

@@ -6,8 +6,8 @@
 }
 
 :root {
-    --mainLightThemeLightBlue: #33C5FF; 
-    --mainLightThemeDarkBlue: #00B7FF;
+    --mainLightThemeLightBlue: #1bbeff; 
+    --mainLightThemeDarkBlue: #00aff5;
     --mainLightThemeTextColor: #00121a;
     color: white;
 }
@@ -40,6 +40,26 @@ header {
     border-radius: 13px;
     align-self: center;
     margin-top: 8px;
+}
+
+button {
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-top: 3px;
+    padding: 3px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btnConfirm {
+    background-color: var(--mainLightThemeLightBlue);
+    color: white;
+    font-weight: bold;
+    padding: 3px 10px;
+}
+
+.btnConfirm:hover {
+    background-color: var(--mainLightThemeDarkBlue);
 }
 
 #btnTheme {
@@ -249,7 +269,7 @@ header {
 
 #project-form {    
     padding: 20px;
-    border: 2px solid black;
+    border: 2px solid var(--mainLightThemeDarkBlue);
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -267,42 +287,9 @@ header {
 }
 
 #project-name-box label {
-    font-size: 22px;
-    color: black;
-}
-
-#project-name-box input {
-    outline: none;
-    border: 1px solid #a1a1a1;
-    border-radius: 5px;
-    padding: 2px 5px;
-    font-size: 18px;
-    width: 100%;
-}
-
-#project-name-box input:focus {
-    border: 1px solid #000;
-}
-
-#confirm-project {
-    margin-top: 8px;
-    align-self: flex-end;
-    padding: 5px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #00b7ff;
-    color: white;
+    font-size: 23px;
     font-weight: bold;
-}
-
-#blur-background {
-    height: 100vh;
-    width: 100vw;
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #00000069;
+    color: black;
 }
 
 #project-area {
@@ -406,7 +393,7 @@ header {
     font-weight: bold;
 }
 
-#title, #description {
+input[type='text'], #description {
     font-size: 20px;
     outline: none;
     border: 2px solid #9E9E9E;
@@ -440,7 +427,7 @@ header {
     justify-content: space-between;
 }
 
-#background-taskForm {
+#background-form {
     background-color: #80808063;
     z-index: 1;
     position: absolute;
@@ -455,13 +442,6 @@ header {
     align-self: end;
     display: flex;
     gap: 5px;
-}
-
-#btnOk, #btnCancel {
-    border: 1px solid black;
-    border-radius: 5px;
-    margin-top: 3px;
-    padding: 3px 10px;
 }
 
 #btnAddTask {
