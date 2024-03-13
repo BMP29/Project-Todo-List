@@ -1,6 +1,6 @@
 import Project from "./Project";
 
-export { addProject, removeProject, getProject,loadProjects, getAllProjects };
+export { addProject, removeProject, getProject,loadProjects, getAllProjects, saveState, addTodoAt };
 
 const Projects = [];
 
@@ -33,6 +33,15 @@ function saveState() {
     localStorage.setItem('ProjectList', state);
 }
 
+function addTodoAt(index, task = undefined) {
+    if(task == undefined) return;
+    
+    const project = getProject(index);
+
+    project.addTodo(task.title, task.description, task.date, task.priority);
+    saveState();
+}
+
 function loadProjects() {
     const size = localStorage.length + 1;
 
@@ -40,7 +49,13 @@ function loadProjects() {
 
     if(state == null) return;
 
-    state.forEach(project => {
+    state.forEach((project, index) => {
         addProject(project.title);
+
+        const tasks = project.todos;
+        tasks.forEach(task => {
+            Projects[index].addTodo(task.title, task.description, task.date, task.priority);
+        })
     });
+    saveState();
 }
