@@ -38,7 +38,7 @@ const renderProjects = (projects = []) => {
 
         //displays the tasks of the project when clicked
         projectItem.addEventListener('click', () => {
-            displayProjectsTasks(projectItem.getAttribute('data-index'));
+            renderProjectsTasks(projectItem.getAttribute('data-index'));
         });
 
         //inserts the project in the DOM
@@ -46,54 +46,79 @@ const renderProjects = (projects = []) => {
     });
 }
 
-const displayProjectsTasks = (index) => {
-    const project = getProject(index);
+const showBtnAddTaskSwitch = (input) => {
+    const on = true, off = false;
+    const btnAddTask = document.getElementById('btnAddTask');
 
+    if(input == on) {
+        btnAddTask.style.visibility = 'visible';
+        btnAddTask.style.opacity = 100;
+    }else if(input == off) {
+        btnAddTask.style.visibility = 'hidden';
+        btnAddTask.style.opacity = 0;
+    }
+}
+
+const renderProjectsTasks = (projIndex) => {
+    const project = getProject(projIndex);
     const projectList = document.getElementById('project-tasks');
     projectList.textContent = '';
-    projectList.setAttribute('data-projId', index);
+    projectList.setAttribute('data-projId', projIndex);
 
     const projectTitle = document.getElementById('project-title');
     projectTitle.textContent = project.title;
 
-    project.todos.forEach((todo, index) => {
-        const task = document.createElement('div');
-        const taskTitle = document.createElement('h3');
-        const lowerContainer = document.createElement('div');
-        const description = document.createElement('p');
-        const date = document.createElement('span');
-    
-        task.classList.add('task');
-        task.setAttribute('data-index', index);
-        task.setAttribute('data-project', project.title);
-        taskTitle.classList.add('task-title');
-        lowerContainer.classList.add('task-lowerPart');
-        description.classList.add('task-description');
-        date.classList.add('task-date');
+    project.todos.forEach((task, index) => {
+        renderTask(project, index);
+    });
 
-        taskTitle.textContent = todo.title;
-        description.textContent = todo.description;
-        date.textContent = todo.date;
+    showBtnAddTaskSwitch(true);
+}
 
-        task.appendChild(taskTitle);
-        task.appendChild(lowerContainer);
-        lowerContainer.append(description);
-        lowerContainer.append(date);
+const renderTask = (project, taskIndex) => {
+    const projectList = document.getElementById('project-tasks');
+    const todo = project.todos[taskIndex];
+    console.log(todo)
 
-        projectList.appendChild(task);
+    const task = document.createElement('div');
+    const taskTitle = document.createElement('h3');
+    const lowerContainer = document.createElement('div');
+    const description = document.createElement('p');
+    const date = document.createElement('span');
 
-        task.addEventListener('click', () => {
-            const height = window.getComputedStyle(task).getPropertyValue('min-height');
-            const minimized = '53px';
-            const expanded  = '250px';
+    task.classList.add('task');
+    task.setAttribute('data-index', taskIndex);
+    task.setAttribute('data-project', project.title);
+    taskTitle.classList.add('task-title');
+    lowerContainer.classList.add('task-lowerPart');
+    description.classList.add('task-description');
+    date.classList.add('task-date');
 
-            if(height == expanded) {
-                task.style.minHeight = minimized;
-            }else if(height == minimized) {
-                task.style.minHeight = expanded;
-            }
+    taskTitle.textContent = todo.title;
+    description.textContent = todo.description;
+    date.textContent = todo.date;
 
-        });
+    task.appendChild(taskTitle);
+    task.appendChild(lowerContainer);
+    lowerContainer.append(description);
+    lowerContainer.append(date);
+
+    projectList.appendChild(task);
+    task.style.visibility = 'visible';
+    setTimeout(() => {
+        task.style.opacity = 100;
+    }, 1);  
+
+    task.addEventListener('click', () => {
+        const height = window.getComputedStyle(task).getPropertyValue('min-height');
+        const minimized = '53px';
+        const expanded  = '250px';
+
+        if(height == expanded) {
+            task.style.minHeight = minimized;
+        }else if(height == minimized) {
+            task.style.minHeight = expanded;
+        }
     });
 }
 
@@ -137,15 +162,24 @@ const loadProjForm = () => {
 
     //when clicked, will create the project with the name typed in the inputName
     //then it'll close the modal
-    btnConfirm.addEventListener('click', () => {
+    btnConfirm.addEventListener('click', handleBtnConfirmClick);
+    btnCancel.addEventListener('click', handleBtnCancelClick);
+    background.addEventListener('click', handleBackgroundClick);
+
+    function handleBtnConfirmClick() {
         addProject(inputName.value);
         renderProjects(getAllProjects());
         document.body.removeChild(background);
-    });
+    }
 
-    btnCancel.addEventListener('click', () => {
+    function handleBtnCancelClick() {
         document.body.removeChild(background);
-    });
+    }
+
+    function handleBackgroundClick(event) {
+        if (event.target === background)
+            document.body.removeChild(background);
+    }
 
     //inserts the project in the DOM
     document.body.appendChild(background);
@@ -161,6 +195,7 @@ const loadTaskForm = () => {
     btnOk.id = 'btnOk';
     btnOk.classList.add('btnConfirm');
     btnOk.textContent = 'Ok';
+    btnOk.type = 'button';
 
     // Create 'Cancel' button
     const btnCancel = document.createElement('button');
@@ -311,8 +346,10 @@ const loadTaskForm = () => {
 
         if (title !== '' && description !== '' && date !== '' && priority !== '') {
             const projectId = document.getElementById('project-tasks').getAttribute('data-projid');
+            const project = getProject(projectId);
+           
             addTodoAt(projectId, { title, description, date, priority });
-            displayProjectsTasks(projectId);
+            renderTask(project, project.todos.length-1);
             document.body.removeChild(bgTaskFormDiv);
         }
     }
