@@ -314,11 +314,16 @@ button {
     background-color: white;
     overflow: hidden;
     transition: min-height 0.4s;
+    transition-property: min-height, opacity;
+    transition-duration: 0.5s;
     min-height: 53px;
     display: flex;
     flex-direction: column;
     margin: 0 5px;
     border: 1px solid var(--mainLightThemeDarkBlue);
+
+    visibility: hidden;
+    opacity: 0;
 }
 
 #project-tasks {
@@ -327,7 +332,6 @@ button {
     gap: 10px;
     flex: 1;
     overflow: scroll;
-    padding-top: 10px;
 }
 
 #project-title {
@@ -445,5 +449,8 @@ input[type='text'], #description {
 }
 
 #btnAddTask {
+    visibility: hidden;
     margin-top: 20px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
 }
