@@ -1,14 +1,14 @@
-import { addProject, getAllProjects, getProject, addTodoAt } from './ProjectsController';
+import { addProject, getAllProjects, getProject, addTodoAt, removeProject, saveState, editProject } from './ProjectsController';
 
 const renderProjects = (projects = []) => {
-    //exits the function if there's no projects to render
-    if(projects.length == 0) return;
-
     //get the project list
     const userProjects = document.getElementById('user-projects');
     
     //clean the project list
     userProjects.textContent = '';
+
+    //exits the function if there's no projects to render
+    if(projects.length == 0) return;
     
     projects.forEach((project, index) => {
         //creates the necessary elements
@@ -20,6 +20,8 @@ const renderProjects = (projects = []) => {
         const projectName = document.createElement('h3');
 
         //add the attributes to them
+        btn1.classList.add('draggable');
+        btn2.classList.add('settings');
         projectItem.classList.add('project-item');
         projectItem.classList.add('sidebar-item');
         projectDrag.classList.add('project-drag');
@@ -36,13 +38,111 @@ const renderProjects = (projects = []) => {
         //adding the project's name
         projectName.textContent = project.title;
 
-        //displays the tasks of the project when clicked
-        projectItem.addEventListener('click', () => {
+        const options = document.createElement('ul');
+        const renameProj = document.createElement('li');
+        const deleteProj = document.createElement('li');
+        const btnRename = document.createElement('button');
+        const btnDelete = document.createElement('button');
+    
+        options.classList.add('options');
+        btnRename.classList.add('rename');
+        btnDelete.classList.add('delete');
+    
+        btnRename.textContent = 'Rename';
+        btnDelete.textContent = 'Delete';
+
+        btnRename.disabled = true;
+        btnDelete.disabled = true;
+        
+        options.appendChild(renameProj);
+        options.appendChild(deleteProj);
+        renameProj.appendChild(btnRename);
+        deleteProj.appendChild(btnDelete);
+
+        projectItem.appendChild(options);
+        
+        //inserts the project in the DOM
+        userProjects.appendChild(projectItem);
+
+        //show/unhide the menu when the user clicks the project's option icon
+        btn2.addEventListener('click', (event) => {
+            const state = window.getComputedStyle(options).getPropertyValue('opacity');
+
+            if(state < 1) {
+                switchOptionsMenuVisibility(index, true);
+            }
+            else if(state == 1) {
+                switchOptionsMenuVisibility(index, false);
+            }
+        });
+
+        //hide the options menu when the user click anywhere in the page
+        window.addEventListener('click', (event) => {
+            const hasClass = event.target.classList.contains('project-settings');
+            
+            if(hasClass == true) return;
+
+            switchOptionsMenuVisibility(false);
+        });
+
+        //prevents the options menu from being hidden when the user clicks inside it
+        options.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+
+        //when clicked, deletes the project, re-render the projects in the sidebar and
+        //the tasks being shown
+        btnDelete.addEventListener('click', () => {
+            removeProject(index);
+            options.remove();
+            saveState();
+            renderProjects(getAllProjects());
+            renderProjectsTasks();
+        });
+
+        btnRename.addEventListener('click', () => {
+            loadProjForm(index);
+        })
+
+        //displays the project's tasks clicked
+        projectName.addEventListener('click', () => {
             renderProjectsTasks(projectItem.getAttribute('data-index'));
         });
 
-        //inserts the project in the DOM
-        userProjects.appendChild(projectItem);
+        //hide and unhide the project's option menu at the index passed
+        //and hides all the other options menu
+        function switchOptionsMenuVisibility(index = undefined, show = false) {
+
+            const optionsMenuList = document.querySelectorAll('.options');
+            const toBeUnhidden = optionsMenuList[index];
+
+            optionsMenuList.forEach((item) => {
+                const btnRename = item.childNodes[0].childNodes[0];
+                const btnDelete = item.childNodes[1].childNodes[0];
+
+                if(toBeUnhidden == item && show == true) {
+                    item.style.visibility = 'visible';
+                    item.style.transform = 'translateY(0px)';
+                    item.style.opacity = 1;
+                    btnRename.disabled = false;
+                    btnDelete.disabled = false;
+                    item.style.cursor = 'pointer';
+                    btnRename.style.cursor = 'pointer';
+                    btnDelete.style.cursor = 'pointer';
+                }else {
+                    item.style.transform = 'translateY(5px)';
+                    item.style.opacity = 0;
+                    btnRename.disabled = true;
+                    btnDelete.disabled = true;
+                    item.style.cursor = 'default';
+                    btnRename.style.cursor = 'default';
+                    btnDelete.style.cursor = 'default';
+                    setTimeout(() => {
+                        item.style.visibility = 'hidden';
+                    }, 200);
+                }
+            });
+        }
     });
 }
 
@@ -53,19 +153,31 @@ const showBtnAddTaskSwitch = (input) => {
     if(input == on) {
         btnAddTask.style.visibility = 'visible';
         btnAddTask.style.opacity = 100;
+        btnAddTask.disabled = false;
     }else if(input == off) {
-        btnAddTask.style.visibility = 'hidden';
         btnAddTask.style.opacity = 0;
+        btnAddTask.disabled = true;
+    
+        setTimeout(() => {
+            btnAddTask.style.visibility = 'hidden';
+        }, 500);
     }
 }
 
-const renderProjectsTasks = (projIndex) => {
+const renderProjectsTasks = (projIndex = undefined) => {
     const project = getProject(projIndex);
     const projectList = document.getElementById('project-tasks');
     projectList.textContent = '';
     projectList.setAttribute('data-projId', projIndex);
 
     const projectTitle = document.getElementById('project-title');
+
+    if(projIndex == undefined) {
+        projectTitle.textContent = 'No Projected Selected';
+        showBtnAddTaskSwitch(false);
+        return;
+    }
+
     projectTitle.textContent = project.title;
 
     project.todos.forEach((task, index) => {
@@ -78,7 +190,6 @@ const renderProjectsTasks = (projIndex) => {
 const renderTask = (project, taskIndex) => {
     const projectList = document.getElementById('project-tasks');
     const todo = project.todos[taskIndex];
-    console.log(todo)
 
     const task = document.createElement('div');
     const taskTitle = document.createElement('h3');
@@ -122,7 +233,7 @@ const renderTask = (project, taskIndex) => {
     });
 }
 
-const loadProjForm = () => {
+const loadProjForm = (index = undefined) => {
     //creates the necessary elements
     const background = document.createElement('div');
     const projectForm = document.createElement('div');
@@ -167,7 +278,14 @@ const loadProjForm = () => {
     background.addEventListener('click', handleBackgroundClick);
 
     function handleBtnConfirmClick() {
-        addProject(inputName.value);
+        if(index == undefined) {
+            addProject(inputName.value);
+        }
+        else {
+            editProject(index, inputName.value);
+            renderProjectsTasks(index);
+        }
+
         renderProjects(getAllProjects());
         document.body.removeChild(background);
     }
