@@ -9,7 +9,9 @@ loadProjects();
 const btnAddProj = document.getElementById('btnAddProject');
 const btnAddTask = document.getElementById('btnAddTask');
 
-btnAddProj.addEventListener('click', loadProjForm);
+btnAddProj.addEventListener('click', () => {
+    loadProjForm();
+});
 
 btnAddTask.addEventListener('click', loadTaskForm);
 
