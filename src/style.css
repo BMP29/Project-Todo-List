@@ -186,6 +186,7 @@ button {
 }
 
 .project-item {
+    position: relative;
     justify-content: space-between;
     margin-right: 5px;
     padding-right: 10px;
@@ -200,6 +201,11 @@ button {
     background: none;
     border: none;
     padding: 0;
+}
+
+.project-item > h3 {
+    flex: 1;
+    text-align: center;
 }
 
 .project-drag, .project-settings {
@@ -453,4 +459,54 @@ input[type='text'], #description {
     margin-top: 20px;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
+}
+
+.options {
+    visibility: hidden;
+    color: black;
+    border: 2px solid var(--mainLightThemeDarkBlue);
+    z-index: 1;
+    background-color: white;
+    position: absolute;
+    border-radius: 5px;
+    top: -58px;
+    left: 179px;
+    transform: translateY(5px);
+    opacity: 0;
+    transition-property: transform, opacity;
+    transition-duration: 0.2s;
+    cursor: default;
+}
+
+.options > li {
+    background-color: white;
+}
+
+.options > li:first-child {
+    border-radius: 4px 4px 0 0;
+}
+
+.options > li:last-child {
+    border-radius: 0 0 4px 4px;
+}
+
+.options > li:hover {
+    background-color: #e7e7e7;
+}
+
+button.rename, button.delete {
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    cursor: default;
+    transition: none;
+    height: 22px;
+    width: 100%;
+    padding: 0 5px;
+    text-align: start;
+} 
+
+.rename:disabled, .delete:disabled {
+    color: black;
 }
