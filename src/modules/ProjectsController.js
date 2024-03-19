@@ -1,8 +1,8 @@
 import Project from "./Project";
 
-export { addProject, removeProject, getProject,loadProjects, getAllProjects, saveState, addTodoAt };
+export { addProject, removeProject, getProject,loadProjects, getAllProjects, saveState, addTodoAt, editProject };
 
-const Projects = [];
+let Projects = [];
 
 function addProject(title) {
     const newProject = new Project(title);
@@ -11,8 +11,12 @@ function addProject(title) {
     saveState();
 }
 
+function editProject(index, title) {
+    Projects[index].title = title;
+    saveState();
+}
+
 function removeProject(index) {
-    index--;
     const toBeRemoved = Projects[index];
 
     const temp = Projects.filter((project) => project !== toBeRemoved);
