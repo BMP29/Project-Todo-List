@@ -1,4 +1,6 @@
+import Project from './Project';
 import { addProject, getAllProjects, getProject, addTodoAt, removeProject, saveState, editProject } from './ProjectsController';
+const { startOfYesterday, isToday, addDays, interval, isWithinInterval} = require("../../node_modules/date-fns");
 
 const renderProjects = (projects = []) => {
     //get the project list
@@ -187,6 +189,84 @@ const renderProjectsTasks = (projIndex = undefined) => {
     showBtnAddTaskSwitch(true);
 }
 
+const renderAllTasks = () => {
+    const projects = getAllProjects();
+    const projectList = document.getElementById('project-tasks');
+    projectList.textContent = '';
+    projectList.setAttribute('data-projId', undefined);
+
+    const projectTitle = document.getElementById('project-title');
+
+    projectTitle.textContent = 'Inbox';
+
+    projects.forEach((project) => {
+        project.todos.forEach((task, index) => {
+            renderTask(project, index);
+        });
+    });
+}
+
+const renderAllWithInInterval = (typeOfInterval) => {
+    const projects = getAllProjects();
+    const projectList = document.getElementById('project-tasks');
+    projectList.textContent = '';
+    projectList.setAttribute('data-projId', undefined);
+
+    const projectTitle = document.getElementById('project-title');
+
+    const yesterday = startOfYesterday();
+    const Days7FromYesterday = addDays(yesterday, 7);
+    const Days30FromYesterday = addDays(yesterday, 30);
+
+    const interval7Days = interval(yesterday, Days7FromYesterday);
+    const interval30Days = interval(yesterday, Days30FromYesterday);
+
+    const toBeRendered = new Project();
+    
+    switch(typeOfInterval) {
+        case 'today':
+            projectTitle.textContent = 'Today';
+
+            projects.forEach((project) => {
+                project.todos.forEach((task) => {
+                    if(isToday(new Date(task.date + " 00:00:00"))) 
+                    toBeRendered.addTodo(task.title, task.description, task.date, task.priority);
+                });
+            });
+        break;
+
+        case 'week':
+            projectTitle.textContent = 'Week';
+
+            projects.forEach((project) => {
+                project.todos.forEach((task) => {
+                    if(isWithinInterval(new Date(task.date + " 00:00:00"), interval7Days)) 
+                        toBeRendered.addTodo(task.title, task.description, task.date, task.priority);
+                });
+            });
+        break;
+
+        case 'month': 
+            projectTitle.textContent = 'Month';
+
+            projects.forEach((project) => {
+                project.todos.forEach((task) => {
+                    if(isWithinInterval(new Date(task.date + " 00:00:00"), interval30Days))
+                        toBeRendered.addTodo(task.title, task.description, task.date, task.priority);
+                });
+            });
+        break;
+
+        default:
+            console.log('something went wrong')
+        break;
+    }
+
+    toBeRendered.todos.forEach((task, index) => {
+        renderTask(toBeRendered, index);
+    })
+}
+
 const renderTask = (project, taskIndex) => {
     const projectList = document.getElementById('project-tasks');
     const todo = project.todos[taskIndex];
@@ -220,17 +300,19 @@ const renderTask = (project, taskIndex) => {
         task.style.opacity = 100;
     }, 1);  
 
-    task.addEventListener('click', () => {
-        const height = window.getComputedStyle(task).getPropertyValue('min-height');
-        const minimized = '53px';
-        const expanded  = '250px';
+    /*
+        task.addEventListener('click', () => {
+            const height = window.getComputedStyle(task).getPropertyValue('min-height');
+            const minimized = '53px';
+            const expanded  = '250px';
 
-        if(height == expanded) {
-            task.style.minHeight = minimized;
-        }else if(height == minimized) {
-            task.style.minHeight = expanded;
-        }
-    });
+            if(height == expanded) {
+                task.style.minHeight = minimized;
+            }else if(height == minimized) {
+                task.style.minHeight = expanded;
+            }
+        });
+    */
 }
 
 const loadProjForm = (index = undefined) => {
@@ -482,4 +564,4 @@ const loadTaskForm = () => {
     }
 };
 
-export { loadProjForm, renderProjects, loadTaskForm };
+export { loadProjForm, renderProjects, loadTaskForm, renderAllTasks, renderAllWithInInterval };
