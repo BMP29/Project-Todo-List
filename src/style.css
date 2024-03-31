@@ -5,11 +5,26 @@
     scroll-behavior: smooth;
 }
 
-:root {
-    --mainLightThemeLightBlue: #1bbeff; 
-    --mainLightThemeDarkBlue: #00aff5;
+:root[data-theme="light"] {
+    --mainBlue: #1bbeff; 
+    --mainDarkerBlue: #00aff5;
     --mainLightThemeTextColor: #00121a;
     color: white;
+}
+
+:root[data-theme="dark"] {
+    --mainBlue: #1bbeff; 
+    --mainDarkerBlue: #00aff5;
+    --mainLightThemeTextColor: #00121a;
+    color: white;
+}
+
+:root[data-theme="light"] body {
+    background-color: white;
+}
+
+:root[data-theme="dark"] body {
+    background-color: black;
 }
 
 body {
@@ -28,9 +43,9 @@ h2, h3, ul {
 }
 
 header {
-    background-color: var(--mainLightThemeLightBlue);
+    background-color: var(--mainBlue);
     display: flex;
-    border-bottom: 13px solid var(--mainLightThemeDarkBlue);
+    border-bottom: 13px solid var(--mainDarkerBlue);
     justify-content: space-between;
     align-items: center;
     padding: 0 15px;
@@ -40,6 +55,7 @@ header {
     border-radius: 13px;
     align-self: center;
     margin-top: 8px;
+    max-height: 104px;
 }
 
 button {
@@ -52,14 +68,14 @@ button {
 }
 
 .btnConfirm {
-    background-color: var(--mainLightThemeLightBlue);
+    background-color: var(--mainBlue);
     color: white;
     font-weight: bold;
     padding: 3px 10px;
 }
 
 .btnConfirm:hover {
-    background-color: var(--mainLightThemeDarkBlue);
+    background-color: var(--mainDarkerBlue);
 }
 
 #btnTheme {
@@ -117,7 +133,7 @@ button {
 }
 
 #btnSideBar:hover  {
-    background-color: var(--mainLightThemeDarkBlue);
+    background-color: var(--mainDarkerBlue);
 }
 
 #content {
@@ -131,16 +147,32 @@ button {
     gap: 8px;
 }
 
-#sidebar {
-    width: 310px;
+:root[data-theme="light"] #sidebar {
     background-color: #ffffff;
+}
+
+:root[data-theme="dark"] #sidebar {
+    background-color: black;
+    color: white;
+}
+
+#sidebar {
     color: var(--mainLightThemeTextColor);
-    transition: 0.3s;
-    margin-left: 7px;
-    border: 3px solid var(--mainLightThemeDarkBlue);
+    border: 3px solid var(--mainDarkerBlue);
+    width: 310px;
     border-radius: 20px;
     overflow: overlay;
     position: sticky;
+    transition: 0.3s;
+    margin-left: 7px;
+}
+
+:root[data-theme="light"] .section-title {
+    border-bottom: 2px solid var(--mainLightThemeTextColor);
+}
+
+:root[data-theme="dark"] .section-title {
+    border-bottom: 2px solid white;
 }
 
 .section-title {
@@ -148,7 +180,6 @@ button {
     margin-bottom: 8px;
     padding-left: 5px;
     margin-top: 15px;
-    border-bottom: 2px solid var(--mainLightThemeTextColor);
 }
 
 .sidebar-list {
@@ -157,7 +188,7 @@ button {
     gap: 10px;
 }
 
-.sidebar-item {
+:root[data-theme="light"] .sidebar-item {
     display: flex;
     align-items: center;
     padding: 2px;
@@ -172,13 +203,34 @@ button {
     background-color: white;
 }
 
+:root[data-theme="dark"] .sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    margin-left: 34px;
+    padding-left: 10px;
+    padding-right: 5px;
+    margin-right: 5px;
+    gap: 5px;
+    border-radius: 7px;
+    box-shadow: 0px 0px 11px 4px rgb(0 0 0 / 8%);
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+
 .sidebar-item > * {
     cursor: pointer;
 }
 
-.sidebar-item:hover {
-    background-color: var(--mainLightThemeDarkBlue);
+:root[data-theme="light"] .sidebar-item:hover {
+    background-color: var(--mainDarkerBlue);
     color: white;
+}
+
+:root[data-theme="dark"] .sidebar-item:hover {
+    background-color: var(--mainLightThemeTextColor);
+    color: #00b7ff;
 }
 
 .btnFilter img {
@@ -193,7 +245,7 @@ button {
 }
 
 .project-item:hover {
-    background-color: var(--mainLightThemeDarkBlue);
+    background-color: var(--mainDarkerBlue);
     color: white;
 }
 
@@ -215,9 +267,16 @@ button {
     background-size: cover;
 }
 
+:root[data-theme="light"] .project-drag {
+    background-image: url('./images/icons8-menu-50.png');
+}
+
+:root[data-theme="dark"] .project-drag {
+    background-image: url('./images/icons8-menu-50\ \(1\).png');
+}
+
 .project-drag {
     margin-left: 5px;
-    background-image: url('./images/icons8-menu-50.png');
 }
 
 .project-settings {
@@ -232,7 +291,7 @@ button {
     background-image: url('./images/thrash-black.png');
 }
 
-.project-item:hover .project-drag {
+:root[data-theme="light"] .project-item:hover .project-drag {
     background-image: url('./images/icons8-menu-50\ \(1\).png');
 }
 
@@ -273,7 +332,7 @@ button {
 }
 
 #btnAddProject:hover, #btnAddTask:hover {
-    background-color: var(--mainLightThemeDarkBlue);
+    background-color: var(--mainDarkerBlue);
     color: white;
 }
 
@@ -283,7 +342,7 @@ button {
 
 #project-form {    
     padding: 20px;
-    border: 2px solid var(--mainLightThemeDarkBlue);
+    border: 2px solid var(--mainDarkerBlue);
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -307,7 +366,7 @@ button {
 }
 
 #project-area {
-    border: 3px solid var(--mainLightThemeDarkBlue);
+    border: 3px solid var(--mainDarkerBlue);
     margin-right: 7px;
     flex: 1;
     border-radius: 20px;
@@ -332,7 +391,7 @@ button {
     min-height: 53px;
     display: flex;
     margin: 0 5px;
-    border: 1px solid var(--mainLightThemeDarkBlue);
+    border: 1px solid var(--mainDarkerBlue);
     flex-wrap: wrap;
     justify-content: end;
     visibility: hidden;
@@ -348,7 +407,7 @@ button {
 }
 
 #project-title {
-    border: 2px solid var(--mainLightThemeDarkBlue);
+    border: 2px solid var(--mainDarkerBlue);
     display: inline-block;
     padding: 5px 10px;
     border-radius: 10px;
@@ -376,7 +435,7 @@ button {
     font-size: 10px;
     text-wrap: nowrap;
     align-self: center;
-    border: 1px solid var(--mainLightThemeDarkBlue);
+    border: 1px solid var(--mainDarkerBlue);
     padding: 2px 8px;
     border-radius: 40px;
 }
@@ -401,7 +460,7 @@ button {
 }
 
 #taskForm {
-    border: 3px solid var(--mainLightThemeDarkBlue);
+    border: 3px solid var(--mainDarkerBlue);
     border-radius: 20px;
     box-shadow: 0px 0px 11px 4px rgb(0 0 0 / 13%);
     color: black;
@@ -487,7 +546,7 @@ input[type='text'], #description {
 .options {
     visibility: hidden;
     color: black;
-    border: 2px solid var(--mainLightThemeDarkBlue);
+    border: 2px solid var(--mainDarkerBlue);
     z-index: 1;
     background-color: white;
     position: absolute;
@@ -565,6 +624,7 @@ button.rename, button.delete {
 
 #sidebar.hidden {
     margin-left: -310px;
+    opacity: 0;
 }
 
 @media (max-width: 700px) {
@@ -584,6 +644,7 @@ button.rename, button.delete {
 
     #sidebar.hidden {
         margin: 0;
-        margin-top: -402px;
+        max-height: 400px;
+        margin-top: -408px;
     }
 }

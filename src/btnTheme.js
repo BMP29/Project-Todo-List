@@ -1,11 +1,15 @@
 const btnTheme = document.getElementById('btnTheme');
 
 btnTheme.addEventListener('click', () => {
-    let className = btnTheme.className;
+    const root = document.documentElement;
 
-    if(className == 'sun') {
-        btnTheme.classList.replace(className, 'moon');
-    }else if(className == 'moon') {
-        btnTheme.classList.replace(className, 'sun');
+    let theme = root.getAttribute('data-theme');
+
+    if(theme == 'light') {
+        root.setAttribute('data-theme', 'dark');
+        btnTheme.classList.replace('sun', 'moon');
+    }else if(theme == 'dark') {
+        root.setAttribute('data-theme', 'light');
+        btnTheme.classList.replace('moon', 'sun');
     }
 });
