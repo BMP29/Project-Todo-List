@@ -208,7 +208,7 @@ button {
     text-align: center;
 }
 
-.project-drag, .project-settings {
+.project-drag, .project-settings, .edit-task-icon, .task-deleteIco {
     display: inline-block;
     height: 27px;
     width: 27px;
@@ -222,6 +222,14 @@ button {
 
 .project-settings {
     background-image: url('./images/icons8-dots-96.png');
+}
+
+.edit-task-icon {
+    background-image: url('./images/edit-black.png');
+}
+
+.task-deleteIco {
+    background-image: url('./images/thrash-black.png');
 }
 
 .project-item:hover .project-drag {
@@ -316,7 +324,6 @@ button {
     padding-right: 5px;
     border-radius: 16px;
     box-shadow: 0px 0px 11px 4px rgb(0 0 0 / 11%);
-    cursor: pointer;
     background-color: white;
     overflow: hidden;
     transition: min-height 0.4s;
@@ -324,10 +331,10 @@ button {
     transition-duration: 0.5s;
     min-height: 53px;
     display: flex;
-    flex-direction: column;
     margin: 0 5px;
     border: 1px solid var(--mainLightThemeDarkBlue);
-
+    flex-wrap: wrap;
+    justify-content: end;
     visibility: hidden;
     opacity: 0;
 }
@@ -368,14 +375,29 @@ button {
 .task-date {
     font-size: 10px;
     text-wrap: nowrap;
-    align-self: end;
+    align-self: center;
+    border: 1px solid var(--mainLightThemeDarkBlue);
+    padding: 2px 8px;
+    border-radius: 40px;
 }
 
-.task-lowerPart {
+.task-content {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    gap: 10px;
     flex: 1;
+    min-width: 87px;
+}
+
+.task .settings, .edit-task, .delete-task {
+    background: 0;
+    padding: 0;
+    border: 0;
+}
+
+.task .settings i, .edit-task-icon, .task-deleteIco {
+    height: 23px;
+    width: 23px;
 }
 
 #taskForm {
@@ -408,6 +430,7 @@ input[type='text'], #description {
     outline: none;
     border: 2px solid #9E9E9E;
     border-radius: 5px;
+    resize: none;
 }
 
 /* Track */
@@ -509,4 +532,58 @@ button.rename, button.delete {
 
 .rename:disabled, .delete:disabled {
     color: black;
+}
+
+.tasks-details {
+    display: flex;
+    gap: 13px;
+}
+
+#taskPrio-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#taskPrio-box label {
+    margin-top: 2px;
+}
+
+#inputImportant {
+    appearance: none;
+    background-image: url('./images/icons8-star-50.png');
+    background-size: cover;
+    margin: 0;
+    height: 30px;
+    width: 30px;
+    transition: background-image 0.1s ease-in-out;
+}
+
+#inputImportant:checked {
+    background-image: url('./images/icons8-star-48.png');
+}
+
+#sidebar.hidden {
+    margin-left: -310px;
+}
+
+@media (max-width: 700px) {
+    #content {
+        flex-direction: column;
+        padding: 7px;
+    }
+
+    #sidebar {
+        width: 100%;
+        margin: 0;
+    }
+
+    #project-area {
+        margin: 0;
+    }
+
+    #sidebar.hidden {
+        margin: 0;
+        margin-top: -402px;
+    }
 }

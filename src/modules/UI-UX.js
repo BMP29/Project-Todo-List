@@ -1,20 +1,20 @@
 import Project from './Project';
-import { addProject, getAllProjects, getProject, addTodoAt, removeProject, saveState, editProject } from './ProjectsController';
-const { startOfYesterday, isToday, addDays, interval, isWithinInterval} = require("../../node_modules/date-fns");
+import { addProject, getAllProjects, getProject, addTodoAt, removeProject, saveState, editProject, getIndexOf } from './ProjectsController';
+const { startOfToday, isToday, addDays, interval, isWithinInterval} = require("../../node_modules/date-fns");
 
 const renderProjects = (projects = []) => {
     //get the project list
     const userProjects = document.getElementById('user-projects');
-    
+
     //clean the project list
     userProjects.textContent = '';
 
     //exits the function if there's no projects to render
     if(projects.length == 0) return;
-    
+
     projects.forEach((project, index) => {
         //creates the necessary elements
-        const projectItem = document.createElement('li'); 
+        const projectItem = document.createElement('li');
         const btn1 = document.createElement('button');
         const btn2 = document.createElement('button');
         const projectDrag = document.createElement('i');
@@ -29,8 +29,8 @@ const renderProjects = (projects = []) => {
         projectDrag.classList.add('project-drag');
         projectSettings.classList.add('project-settings');
         projectItem.setAttribute('data-index', index);
-        
-        //append them 
+
+        //append them
         projectItem.appendChild(btn1);
         projectItem.appendChild(projectName);
         projectItem.appendChild(btn2);
@@ -45,24 +45,24 @@ const renderProjects = (projects = []) => {
         const deleteProj = document.createElement('li');
         const btnRename = document.createElement('button');
         const btnDelete = document.createElement('button');
-    
+
         options.classList.add('options');
         btnRename.classList.add('rename');
         btnDelete.classList.add('delete');
-    
+
         btnRename.textContent = 'Rename';
         btnDelete.textContent = 'Delete';
 
         btnRename.disabled = true;
         btnDelete.disabled = true;
-        
+
         options.appendChild(renameProj);
         options.appendChild(deleteProj);
         renameProj.appendChild(btnRename);
         deleteProj.appendChild(btnDelete);
 
         projectItem.appendChild(options);
-        
+
         //inserts the project in the DOM
         userProjects.appendChild(projectItem);
 
@@ -81,7 +81,7 @@ const renderProjects = (projects = []) => {
         //hide the options menu when the user click anywhere in the page
         window.addEventListener('click', (event) => {
             const hasClass = event.target.classList.contains('project-settings');
-            
+
             if(hasClass == true) return;
 
             switchOptionsMenuVisibility(false);
@@ -159,7 +159,7 @@ const showBtnAddTaskSwitch = (input) => {
     }else if(input == off) {
         btnAddTask.style.opacity = 0;
         btnAddTask.disabled = true;
-    
+
         setTimeout(() => {
             btnAddTask.style.visibility = 'hidden';
         }, 500);
@@ -175,7 +175,7 @@ const renderProjectsTasks = (projIndex = undefined) => {
     const projectTitle = document.getElementById('project-title');
 
     if(projIndex == undefined) {
-        projectTitle.textContent = 'No Projected Selected';
+        projectTitle.textContent = 'No Projects Selected';
         showBtnAddTaskSwitch(false);
         return;
     }
@@ -193,11 +193,12 @@ const renderAllTasks = () => {
     const projects = getAllProjects();
     const projectList = document.getElementById('project-tasks');
     projectList.textContent = '';
-    projectList.setAttribute('data-projId', undefined);
+    projectList.setAttribute('data-projId', 'Inbox');
 
     const projectTitle = document.getElementById('project-title');
 
     projectTitle.textContent = 'Inbox';
+    showBtnAddTaskSwitch(false);
 
     projects.forEach((project) => {
         project.todos.forEach((task, index) => {
@@ -210,95 +211,165 @@ const renderAllWithInInterval = (typeOfInterval) => {
     const projects = getAllProjects();
     const projectList = document.getElementById('project-tasks');
     projectList.textContent = '';
-    projectList.setAttribute('data-projId', undefined);
+    projectList.setAttribute('data-projId', typeOfInterval);
 
     const projectTitle = document.getElementById('project-title');
 
-    const yesterday = startOfYesterday();
-    const Days7FromYesterday = addDays(yesterday, 7);
-    const Days30FromYesterday = addDays(yesterday, 30);
+    const today = startOfToday();
+    const Days7FromToday= addDays(today, 6);
+    const Days29FromToday = addDays(today, 29);
 
-    const interval7Days = interval(yesterday, Days7FromYesterday);
-    const interval30Days = interval(yesterday, Days30FromYesterday);
+    const interval7Days = interval(today, Days7FromToday);
+    const interval30Days = interval(today, Days29FromToday);
 
-    const toBeRendered = new Project();
-    
+    showBtnAddTaskSwitch(false);
     switch(typeOfInterval) {
-        case 'today':
+        case 'Today':
             projectTitle.textContent = 'Today';
 
             projects.forEach((project) => {
-                project.todos.forEach((task) => {
-                    if(isToday(new Date(task.date + " 00:00:00"))) 
-                    toBeRendered.addTodo(task.title, task.description, task.date, task.priority);
+                project.todos.forEach((task, index) => {
+                    if(isToday(new Date(task.date + " 00:00:00")))
+                        renderTask(project, index);
                 });
             });
         break;
 
-        case 'week':
+        case 'Week':
             projectTitle.textContent = 'Week';
 
             projects.forEach((project) => {
-                project.todos.forEach((task) => {
-                    if(isWithinInterval(new Date(task.date + " 00:00:00"), interval7Days)) 
-                        toBeRendered.addTodo(task.title, task.description, task.date, task.priority);
+                project.todos.forEach((task, index) => {
+                    if(isWithinInterval(new Date(task.date + " 00:00:00"), interval7Days))
+                        renderTask(project, index);
                 });
             });
         break;
 
-        case 'month': 
+        case 'Month':
             projectTitle.textContent = 'Month';
 
-            projects.forEach((project) => {
+            projects.forEach((project, index) => {
                 project.todos.forEach((task) => {
                     if(isWithinInterval(new Date(task.date + " 00:00:00"), interval30Days))
-                        toBeRendered.addTodo(task.title, task.description, task.date, task.priority);
+                        renderTask(project, index);
                 });
             });
         break;
 
         default:
-            console.log('something went wrong')
+            alert('something went wrong');
         break;
     }
+}
 
-    toBeRendered.todos.forEach((task, index) => {
-        renderTask(toBeRendered, index);
-    })
+const renderAllImportantTasks = () => {
+    const projects = getAllProjects();
+    const projectList = document.getElementById('project-tasks');
+    projectList.textContent = '';
+    projectList.setAttribute('data-projId', 'Important');
+
+    const projectTitle = document.getElementById('project-title');
+
+    projectTitle.textContent = 'Important';
+    showBtnAddTaskSwitch(false);
+
+    projects.forEach((project) => {
+        project.todos.forEach((task, index) => {
+            if(task.important == true)
+                renderTask(project, index);
+        });
+    });
 }
 
 const renderTask = (project, taskIndex) => {
     const projectList = document.getElementById('project-tasks');
     const todo = project.todos[taskIndex];
 
+    //index of the project/section(inbox, week etc) being displayed
+    const idDisplayedProj = projectList.getAttribute('data-projid');
+
+    //index of the task's project
+    const idProj = getIndexOf(project);
+
     const task = document.createElement('div');
     const taskTitle = document.createElement('h3');
-    const lowerContainer = document.createElement('div');
+    const taskContent = document.createElement('div');
     const description = document.createElement('p');
     const date = document.createElement('span');
+    const editIcon = document.createElement('i');
+    const taskDeleteIco = document.createElement('i');
+    const btnEdit = document.createElement('button');
+    const btnDelete = document.createElement('button');
+    const details = document.createElement('div');
 
     task.classList.add('task');
-    task.setAttribute('data-index', taskIndex);
-    task.setAttribute('data-project', project.title);
+    task.setAttribute('data-indexTask', taskIndex);
+    task.setAttribute('data-projectId', idProj);
     taskTitle.classList.add('task-title');
-    lowerContainer.classList.add('task-lowerPart');
+    taskContent.classList.add('task-content');
     description.classList.add('task-description');
     date.classList.add('task-date');
+    btnEdit.classList.add('edit-task');
+    btnDelete.classList.add('delete-task');
+    editIcon.classList.add('edit-task-icon');
+    taskDeleteIco.classList.add('task-deleteIco');
+    details.classList.add('tasks-details');
 
     taskTitle.textContent = todo.title;
     description.textContent = todo.description;
-    date.textContent = todo.date;
+    date.textContent = todo.date.replaceAll('-', '/');
 
-    task.appendChild(taskTitle);
-    task.appendChild(lowerContainer);
-    lowerContainer.append(description);
-    lowerContainer.append(date);
+    task.appendChild(taskContent);
+    task.appendChild(details);
+    details.appendChild(date);
+    details.appendChild(btnEdit);
+    details.appendChild(btnDelete);
+    btnEdit.appendChild(editIcon);
+    btnDelete.appendChild(taskDeleteIco);
+    taskContent.append(taskTitle);
+    taskContent.append(description);
 
     projectList.appendChild(task);
     task.style.visibility = 'visible';
     setTimeout(() => {
         task.style.opacity = 100;
-    }, 1);  
+    }, 1);
+
+    btnEdit.addEventListener('click', () => {
+        loadTaskForm(taskIndex);
+    });
+
+    btnDelete.addEventListener('click', () => {
+        project.removeTodo(taskIndex);
+        saveState();
+
+        switch(idDisplayedProj) {
+            case 'Inbox':
+                renderAllTasks();
+            break;
+
+            case 'Today':
+                renderAllWithInInterval('Today');
+            break;
+
+            case 'Week':
+                renderAllWithInInterval('Week');
+            break;
+
+            case 'Month':
+                renderAllWithInInterval('Month');
+            break;
+
+            case 'Important':
+                renderAllImportantTasks();
+            break;
+
+            default:
+                renderProjectsTasks(idDisplayedProj);
+            break;
+        }
+    });
 
     /*
         task.addEventListener('click', () => {
@@ -324,8 +395,8 @@ const loadProjForm = (index = undefined) => {
     const inputName = document.createElement('input');
     const btnConfirm = document.createElement('button');
     const btnCancel = document.createElement('button');
-    const buttonBox = document.createElement('div'); 
-    
+    const buttonBox = document.createElement('div');
+
     //add the attributes to them
     background.setAttribute('id', 'background-form');
     projectForm.setAttribute('id', 'project-form');
@@ -343,8 +414,8 @@ const loadProjForm = (index = undefined) => {
     labelName.textContent = 'Name';
     btnConfirm.textContent = 'Ok';
     btnCancel.textContent = 'Cancel';
-    
-    //append them 
+
+    //append them
     background.appendChild(projectForm);
     projectForm.appendChild(projectNameBox);
     projectNameBox.appendChild(labelName);
@@ -385,7 +456,9 @@ const loadProjForm = (index = undefined) => {
     document.body.appendChild(background);
 }
 
-const loadTaskForm = () => {
+const loadTaskForm = (taskIndex = undefined) => {
+    const projectIdDisplayed = document.getElementById('project-tasks').getAttribute('data-projid');
+    
     // Create button box
     const buttonBox = document.createElement('div');
     buttonBox.id = 'button-box';
@@ -456,43 +529,23 @@ const loadTaskForm = () => {
     const detailsBoxDiv = document.createElement('div');
     detailsBoxDiv.id = 'details-box';
 
-    // Create a div for the priority of the task
+    // Create a div for the important of the task
     const taskPrioBoxDiv = document.createElement('div');
     taskPrioBoxDiv.id = 'taskPrio-box';
 
-    // Create a label for the priority select input
-    const priorityLabel = document.createElement('label');
-    priorityLabel.htmlFor = 'task-priority';
-    priorityLabel.textContent = 'Priority';
+    // Create a label for the important select input
+    const importantLabel = document.createElement('label');
+    importantLabel.htmlFor = 'inputImportant';
+    importantLabel.textContent = 'Important';
 
-    // Create a select input for the priority
-    const prioritySelect = document.createElement('select');
-    prioritySelect.name = 'task-priority';
-    prioritySelect.id = 'task-priority';
-    prioritySelect.required = true;
+    const inputImportant = document.createElement('input');
+    inputImportant.id = 'inputImportant';
+    inputImportant.setAttribute('type', 'checkbox');
 
-    // Create options for priority
-    const lowOption = document.createElement('option');
-    lowOption.value = 'low';
-    lowOption.textContent = 'Low';
-    lowOption.selected = true;
+    // Append important label and select input to the important box div
+    taskPrioBoxDiv.appendChild(inputImportant);
+    taskPrioBoxDiv.appendChild(importantLabel);
 
-    const mediumOption = document.createElement('option');
-    mediumOption.value = 'medium';
-    mediumOption.textContent = 'Medium';
-
-    const highOption = document.createElement('option');
-    highOption.value = 'high';
-    highOption.textContent = 'High';
-
-    // Append options to the select input
-    prioritySelect.appendChild(lowOption);
-    prioritySelect.appendChild(mediumOption);
-    prioritySelect.appendChild(highOption);
-
-    // Append priority label and select input to the priority box div
-    taskPrioBoxDiv.appendChild(priorityLabel);
-    taskPrioBoxDiv.appendChild(prioritySelect);
 
     // Create a div for the date of the task
     const taskDataBoxDiv = document.createElement('div');
@@ -514,7 +567,7 @@ const loadTaskForm = () => {
     taskDataBoxDiv.appendChild(dateLabel);
     taskDataBoxDiv.appendChild(dateInput);
 
-    // Append priority box and task data box to the details box div
+    // Append important box and task data box to the details box div
     detailsBoxDiv.appendChild(taskPrioBoxDiv);
     detailsBoxDiv.appendChild(taskDataBoxDiv);
 
@@ -532,6 +585,19 @@ const loadTaskForm = () => {
     // Append background task form to the body or any desired parent element
     document.body.appendChild(bgTaskFormDiv);
 
+    let taskObj = undefined;
+    let taskElem = undefined;
+    if(taskIndex != undefined) {
+        taskElem = document.querySelector(`[data-indexTask="${taskIndex}"`);
+        const idProj = taskElem.getAttribute('data-projectid');
+        taskObj = getProject(idProj).todos[taskIndex];
+        
+        titleInput.value = taskObj.title;
+        descriptionTextarea.textContent = taskObj.description;
+        dateInput.value = taskObj.date;
+        inputImportant.checked = taskObj.important;
+    }
+
     // Add event listeners
     btnOk.addEventListener('click', handleOkButtonClick);
     btnCancel.addEventListener('click', handleCancelButtonClick);
@@ -541,17 +607,48 @@ const loadTaskForm = () => {
     function handleOkButtonClick() {
         const title = titleInput.value;
         const description = descriptionTextarea.value;
-        const priority = prioritySelect.value;
+        const important = inputImportant.checked;
         const date = dateInput.value;
 
-        if (title !== '' && description !== '' && date !== '' && priority !== '') {
-            const projectId = document.getElementById('project-tasks').getAttribute('data-projid');
-            const project = getProject(projectId);
-           
-            addTodoAt(projectId, { title, description, date, priority });
+        const project = getProject(projectIdDisplayed);
+
+        if(title === '' && description === '' && date === '' && important === '' ) return;
+
+
+        if(taskIndex == undefined) {
+            addTodoAt(projectIdDisplayed, { title, description, date, important });
             renderTask(project, project.todos.length-1);
-            document.body.removeChild(bgTaskFormDiv);
+        }else {    
+            taskObj.title = title;
+            taskObj.description = description;
+            taskObj.important = important;
+            taskObj.date = date;
+
+            saveState();
+
+            switch(projectIdDisplayed) {
+                case 'Today':
+                    renderAllWithInInterval('Today');
+                break;
+
+                case 'Week':
+                    renderAllWithInInterval('Week');
+                break;
+
+                case 'Month':
+                    renderAllWithInInterval('Month');
+                break;
+
+                case 'Important':
+                    renderAllImportantTasks();
+                break;
+    
+                default:    
+                    editTask(taskObj, taskElem);
+                break;
+            }
         }
+        document.body.removeChild(bgTaskFormDiv);
     }
 
     function handleCancelButtonClick() {
@@ -564,4 +661,14 @@ const loadTaskForm = () => {
     }
 };
 
-export { loadProjForm, renderProjects, loadTaskForm, renderAllTasks, renderAllWithInInterval };
+const editTask = (taskObj, taskElem) => {
+    const title = taskElem.childNodes[0].childNodes[0];
+    const description = taskElem.childNodes[0].childNodes[1];
+    const date = taskElem.childNodes[1].childNodes[0];
+
+    title.textContent = taskObj.title;
+    description.textContent = taskObj.description;
+    date.textContent = taskObj.date.replaceAll('-', '/');
+}
+
+export { loadProjForm, renderProjects, loadTaskForm, renderAllTasks, renderAllWithInInterval, renderAllImportantTasks };

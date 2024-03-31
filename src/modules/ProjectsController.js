@@ -1,6 +1,6 @@
 import Project from "./Project";
 
-export { addProject, removeProject, getProject,loadProjects, getAllProjects, saveState, addTodoAt, editProject };
+export { addProject, removeProject, getProject,loadProjects, getAllProjects, saveState, addTodoAt, editProject, getIndexOf };
 
 let Projects = [];
 
@@ -9,6 +9,16 @@ function addProject(title) {
     Projects.push(newProject);
 
     saveState();
+}
+
+function getIndexOf(project) {
+    let index = undefined;
+    Projects.forEach((proj, id) => {
+        if(proj == project)
+            index = id;
+    });
+
+    return index;
 }
 
 function editProject(index, title) {
@@ -42,7 +52,7 @@ function addTodoAt(index, task = undefined) {
     
     const project = getProject(index);
 
-    project.addTodo(task.title, task.description, task.date, task.priority);
+    project.addTodo(task.title, task.description, task.date, task.important);
     saveState();
 }
 
@@ -58,7 +68,7 @@ function loadProjects() {
 
         const tasks = project.todos;
         tasks.forEach(task => {
-            Projects[index].addTodo(task.title, task.description, task.date, task.priority);
+            Projects[index].addTodo(task.title, task.description, task.date, task.important);
         })
     });
     saveState();
