@@ -1,6 +1,7 @@
 import '../src/style.css'
 import './btnTheme'
 import './btnSideBar'
+import html from "./index.html";
 import { loadProjects, getAllProjects } from './modules/ProjectsController';
 import { loadProjForm, renderProjects, loadTaskForm, renderAllTasks, renderAllWithInInterval, renderAllImportantTasks} from './modules/UI-UX';
 

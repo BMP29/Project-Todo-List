@@ -14,6 +14,7 @@ module.exports = {
     output: {
       filename: '[name].js',
       path: path.resolve(__dirname, 'dist'),
+      assetModuleFilename: 'images/[name][ext]',
       clean: true,
     },
     module: {
@@ -25,6 +26,10 @@ module.exports = {
         {
           test: /\.(png|svg|jpg|jpeg|gif)$/i,
           type: 'asset/resource',
+        },
+        {
+          test: /\.html$/i,
+          loader: "html-loader",
         },
       ],
     },
