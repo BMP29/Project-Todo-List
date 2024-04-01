@@ -648,4 +648,8 @@ button.rename, button.delete {
         max-height: 400px;
         margin-top: -408px;
     }
+
+    #taskForm {
+        max-width: 360px;
+    }
 }
