@@ -1,9 +1,8 @@
 import '../src/style.css'
-import './btnTheme'
-import './btnSideBar'
 import html from "./index.html";
 import { loadProjects, getAllProjects } from './modules/ProjectsController';
-import { loadProjForm, renderProjects, loadTaskForm, renderAllTasks, renderAllWithInInterval, renderAllImportantTasks} from './modules/UI-UX';
+import { loadProjForm, renderProjects, loadTaskForm, renderAllTasks, 
+    renderAllWithInInterval, renderAllImportantTasks, showSideBarBtn, switchTheme } from './modules/InterfaceController';
 
 loadProjects();
 
@@ -14,6 +13,16 @@ const btnToday = document.getElementById('today');
 const btnWeek = document.getElementById('week');
 const btnMonth = document.getElementById('month');
 const btnImportant = document.getElementById('important');
+const btnSB = document.getElementById('btnSideBar');
+const btnTheme = document.getElementById('btnTheme');
+
+btnSB.addEventListener('click', () => {
+    showSideBarBtn();
+})
+
+btnTheme.addEventListener('click', () => {
+    switchTheme();
+});
 
 btnAddProj.addEventListener('click', () => {
     loadProjForm();

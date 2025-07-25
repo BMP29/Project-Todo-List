@@ -1,4 +1,4 @@
-import Project from "./Project";
+import Project from "../models/Project";
 
 export { addProject, removeProject, getProject,loadProjects, getAllProjects, saveState, addTodoAt, editProject, getIndexOf };
 
